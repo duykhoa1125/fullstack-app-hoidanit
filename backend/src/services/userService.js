@@ -14,8 +14,37 @@ const createUserService = async (name, email, password) => {
       role: "user",
     });
     return result;
-    
   } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+const loginService = async (email, password) => {
+  try {
+    const user = await User.findOne({ email: email });
+    if (user) {
+
+      const isMatchPassword = await bcrypt.compare(password, user.password);
+      if (!isMatchPassword) {
+
+        return {
+          EC: 1,
+          EM: "User not found",
+        };
+      } else {
+        return "create access token";
+      }
+
+      return;
+    } else {
+      return {
+        EC: 2,
+        EM: "User not found",
+      };
+    }
+    return result;
+  } catch {
     console.log(error);
     return null;
   }
@@ -23,4 +52,5 @@ const createUserService = async (name, email, password) => {
 
 module.exports = {
   createUserService,
+  loginService,
 };
