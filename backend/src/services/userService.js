@@ -14,6 +14,7 @@ const createUserService = async (name, email, password) => {
       role: "user",
     });
     return result;
+    
   } catch (error) {
     console.log(error);
     return null;
