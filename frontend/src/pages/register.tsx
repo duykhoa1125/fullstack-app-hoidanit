@@ -1,28 +1,28 @@
-
-import '@ant-design/v5-patch-for-react-19';//tương thích react 19
+import "@ant-design/v5-patch-for-react-19"; //tương thích react 19
 import type { FormProps } from "antd";
 import { Button, Form, Input, notification } from "antd";
 import { createUserApi } from "../util/api";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 // Đổi tên component sang PascalCase đúng chuẩn React
 const RegisterPage = () => {
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     const { name, email, password } = values;
     try {
-      const res = await createUserApi(name!, email!, password!);
+      const res: any = await createUserApi(name!, email!, password!);
+      console.log("Register API response:", res);
       if (res) {
         notification.success({
           message: "Registration Successful",
           description: "You have successfully registered.",
         });
-        navigate('/login')
+        navigate("/login");
       }
       console.log("Success:", res);
     } catch (error) {
+      console.error("Registration error:", error);
       notification.error({
         message: "Registration Failed",
         description:

@@ -1,6 +1,8 @@
+require("dotenv").config();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const saltRounds = 10; // độ mạnh của hash
+const jwt = require("jsonwebtoken");
 
 const createUserService = async (name, email, password) => {
   try {
@@ -23,30 +25,46 @@ const createUserService = async (name, email, password) => {
 const loginService = async (email, password) => {
   try {
     const user = await User.findOne({ email: email });
-    if (user) {
-
-      const isMatchPassword = await bcrypt.compare(password, user.password);
-      if (!isMatchPassword) {
-
-        return {
-          EC: 1,
-          EM: "User not found",
-        };
-      } else {
-        return "create access token";
-      }
-
-      return;
-    } else {
+    if (!user) {
       return {
-        EC: 2,
+        EC: 1,
         EM: "User not found",
       };
     }
-    return result;
-  } catch {
+    const isMatchPassword = await bcrypt.compare(password, user.password);
+    if (!isMatchPassword) {
+      return {
+        EC: 2,
+        EM: "Wrong password",
+      };
+    }
+    const payload = {
+      email: user.email,
+      name: user.name,
+    };
+    const accessToken = jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN || "1d",
+      }
+    );
+    return {
+      EC: 0,
+      EM: "Login successful",
+      accessToken,
+      user: {
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
+    };
+  } catch (error) {
     console.log(error);
-    return null;
+    return {
+      EC: -1,
+      EM: "Internal server error",
+    };
   }
 };
 
