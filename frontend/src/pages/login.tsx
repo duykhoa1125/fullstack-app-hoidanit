@@ -4,6 +4,11 @@ import { Button, Form, Input, notification } from "antd";
 import { loginApi } from "../util/api";
 import { useNavigate } from "react-router-dom";
 
+type FieldType = {
+  email?: string;
+  password?: string;
+};
+
 // Đổi tên component sang PascalCase đúng chuẩn React
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -75,7 +80,3 @@ const LoginPage = () => {
 
 export default LoginPage;
 
-type FieldType = {
-  email?: string;
-  password?: string;
-};

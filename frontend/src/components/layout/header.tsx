@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import {
-  MailOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
+import { MailOutlined, SettingOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
-import {Link} from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 const Header: React.FC = () => {
+  const navigate = useNavigate();
+
   const items: MenuItem[] = [
     {
       label: <Link to={"/"}>Home page</Link>,
@@ -26,8 +25,22 @@ const Header: React.FC = () => {
       key: "SubMenu",
       icon: <SettingOutlined />,
       children: [
-        { label: "Login", key: "login" },
-        { label: "Logout", key: "logout" },
+        { label: <Link to={"/login"}>Login</Link>, key: "login" },
+        {
+          label: (
+            <span
+              onClick={() => {
+                localStorage.removeItem("access_token");
+                navigate("/");
+                //chua hoạt động 
+                setCurrent("home"); //lay theo bien key
+              }}
+            >
+              Logout
+            </span>
+          ),
+          key: "logout",
+        },
       ],
     },
   ];
