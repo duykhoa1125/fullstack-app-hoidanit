@@ -1,9 +1,10 @@
 const express = require('express');
 const { createUser, handleLogin, getUser } = require('../controllers/userController');
-const delay = require('../middleware/delay');
+const auth = require('../middleware/auth');
 const routerAPI = express.Router();
 
-routerAPI.use(delay);
+routerAPI.use(auth)
+
 routerAPI.get('/', (req, res) => {
     return res.status(200).json({message:"hello api"})
 });
