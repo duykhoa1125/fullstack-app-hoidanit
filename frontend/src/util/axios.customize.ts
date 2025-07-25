@@ -4,8 +4,6 @@ const instance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
 });
 
-// instance.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-
 /////////////////////////////////////////
 //past from npm axios interceptor
 
@@ -13,6 +11,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   function (config) {
     // Do something before request is sent
+    config.headers.Authorization = `Bearer ${localStorage.getItem("access_token")}`;
     return config;
   },
   function (error) {
