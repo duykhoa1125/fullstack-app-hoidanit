@@ -14,7 +14,7 @@ const LoginPage = () => {
       const res: any = await loginApi(email!, password!);
       console.log("Login API response:", res);
       if (Number(res?.EC) === 0) {
-        localStorage.setItem("accessToken", res?.accessToken);
+        localStorage.setItem("access_token", res?.accessToken);
         notification.success({
           message: "login Successful",
           description: "You have successfully logined.",
