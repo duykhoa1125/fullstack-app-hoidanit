@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RegisterPage from "./pages/register.tsx";
 import HomePage from "./pages/home.tsx";
 import LoginPage from "./pages/login.tsx";
+import { AuthWrapper } from "./components/context/auth.context.tsx";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage/>
+        element: <HomePage />,
       },
       {
         path: "user",
@@ -30,13 +31,15 @@ const router = createBrowserRouter([
   },
   {
     path: "login",
-    element: <LoginPage/>
-  }
+    element: <LoginPage />,
+  },
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     {/* <App /> */}
-    <RouterProvider router={router} />
+    <AuthWrapper>
+      <RouterProvider router={router} />
+    </AuthWrapper>
   </StrictMode>
 );

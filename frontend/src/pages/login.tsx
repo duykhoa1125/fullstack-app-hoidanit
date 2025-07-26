@@ -3,6 +3,8 @@ import type { FormProps } from "antd";
 import { Button, Form, Input, notification } from "antd";
 import { loginApi } from "../util/api";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../components/context/auth.context";
 
 type FieldType = {
   email?: string;
@@ -12,18 +14,28 @@ type FieldType = {
 // Đổi tên component sang PascalCase đúng chuẩn React
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { setAuth } = useContext(AuthContext);
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     const { email, password } = values;
     try {
       const res: any = await loginApi(email!, password!);
       console.log("Login API response:", res);
+
       if (Number(res?.EC) === 0) {
         localStorage.setItem("access_token", res?.accessToken);
         notification.success({
           message: "login Successful",
           description: "You have successfully logined.",
         });
+        setAuth({
+          isAuthenticated: true,
+          user: {
+            email: res?.user?.email ?? "",
+            name: res?.user?.name ?? "",
+          },
+        });
+        
         // login thanh cong ve trang chu
         navigate("/");
       } else {
@@ -79,4 +91,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
