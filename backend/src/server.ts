@@ -1,13 +1,11 @@
-require("dotenv").config();
-
-const path = require("path");
-const cors = require("cors");
-const express = require("express");
-const mongoose = require("mongoose");
-const configViewEngine = require("./config/viewEngine");
-const apiRoutes = require("./routes/api");
-const connection = require("./config/database");
-const { getHomepage } = require("./controllers/homeController");
+import "dotenv/config";
+import path from "path";
+import cors from "cors";
+import express from "express";
+import mongoose from "mongoose";
+import configViewEngine from "./config/viewEngine";
+import apiRoutes from "./routes/api";
+import { getHomepage } from "./controllers/homeController";
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -25,8 +23,14 @@ app.use("/", getHomepage);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views")); // Đường dẫn tuyệt đối đến thư mục views
 
+const mongoUri = process.env.MONGO_DB_URI;
+if (!mongoUri) {
+  console.error("MONGO_DB_URI is not defined");
+  process.exit(1);
+}
+
 mongoose
-  .connect(process.env.MONGO_DB_URI)
+  .connect(mongoUri)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
