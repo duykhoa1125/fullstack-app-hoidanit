@@ -1,15 +1,14 @@
-import { createContext, useState } from "react";
+import { useState } from "react";
+import type { ReactNode } from "react";
+import { AuthContext, type AuthState } from "./auth-context";
 
-export const AuthContext = createContext({
-  isAuthenticated: false,
-  user: {
-    email: "",
-    name: "",
-  },
-});
+// Define props type for AuthWrapper
+interface AuthWrapperProps {
+  children: ReactNode;
+}
 
-export const AuthWrapper = (props) => {
-  const [auth, setAuth] = useState({
+export const AuthWrapper = (props: AuthWrapperProps) => {
+  const [auth, setAuth] = useState<AuthState>({
     isAuthenticated: false,
     user: {
       email: "",
@@ -17,5 +16,5 @@ export const AuthWrapper = (props) => {
     },
   });
 
-  return <AuthContext value={{ auth, setAuth }}>{props.children}</AuthContext>;
+  return <AuthContext.Provider value={{ auth, setAuth }}>{props.children}</AuthContext.Provider>;
 };

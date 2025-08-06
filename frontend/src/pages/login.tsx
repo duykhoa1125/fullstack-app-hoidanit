@@ -4,7 +4,7 @@ import { Button, Form, Input, notification } from "antd";
 import { loginApi } from "../util/api";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { AuthContext } from "../components/context/auth.context";
+import { AuthContext } from "../components/context/auth-context";
 
 type FieldType = {
   email?: string;
@@ -19,11 +19,11 @@ const LoginPage = () => {
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     const { email, password } = values;
     try {
-      const res: any = await loginApi(email!, password!);
+      const res = await loginApi(email!, password!);
       console.log("Login API response:", res);
 
       if (Number(res?.EC) === 0) {
-        localStorage.setItem("access_token", res?.accessToken);
+        localStorage.setItem("access_token", res?.accessToken || "");
         notification.success({
           message: "login Successful",
           description: "You have successfully logined.",

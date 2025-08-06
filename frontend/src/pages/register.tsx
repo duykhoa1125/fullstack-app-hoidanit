@@ -4,6 +4,12 @@ import { Button, Form, Input, notification } from "antd";
 import { createUserApi } from "../util/api";
 import { useNavigate } from "react-router-dom";
 
+type FieldType = {
+  email?: string;
+  password?: string;
+  name?: string;
+};
+
 // Đổi tên component sang PascalCase đúng chuẩn React
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -11,7 +17,7 @@ const RegisterPage = () => {
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     const { name, email, password } = values;
     try {
-      const res: any = await createUserApi(name!, email!, password!);
+      const res = await createUserApi(name!, email!, password!);
       console.log("Register API response:", res);
       if (res) {
         notification.success({
@@ -78,9 +84,3 @@ const RegisterPage = () => {
 };
 
 export default RegisterPage;
-
-type FieldType = {
-  email?: string;
-  password?: string;
-  name?: string;
-};

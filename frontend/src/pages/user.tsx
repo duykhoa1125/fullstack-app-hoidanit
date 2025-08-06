@@ -1,18 +1,27 @@
 import { notification, Table } from "antd";
 import { useEffect, useState } from "react";
 import { getUserApi } from "../util/api";
+import type { User } from "../types/api";
 
 const UserPage = () => {
-    const [dataSource, setDataSource] = useState([]) 
+    const [dataSource, setDataSource] = useState<User[]>([]) 
     useEffect(()=>{
         const fetchUsers = async () =>{
-            const res = await getUserApi()
-            if(!res?.message){
-                setDataSource(res)
-            } else{
-              notification.error({
-                message: "Unauthorized",
-              })
+            try {
+                const res = await getUserApi();
+                setDataSource(res);
+            } catch (error: unknown) {
+                let errorMessage = "Failed to fetch users";
+                
+                if (error && typeof error === 'object' && 'response' in error) {
+                    const axiosError = error as { response?: { data?: { EM?: string } } };
+                    errorMessage = axiosError.response?.data?.EM || errorMessage;
+                }
+                
+                notification.error({
+                    message: "Unauthorized",
+                    description: errorMessage,
+                });
             }
         }
         fetchUsers()

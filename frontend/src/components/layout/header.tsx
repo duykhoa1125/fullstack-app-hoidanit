@@ -3,7 +3,7 @@ import { MailOutlined, SettingOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/auth.context";
+import { AuthContext } from "../context/auth-context";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
